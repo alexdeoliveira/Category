@@ -29,6 +29,11 @@ class Category extends Model implements SluggableInterface
         'parent_id'
     ];
 
+    public function categorizable()
+    {
+        return $this->morphTo();
+    }
+
     public function parent()
     {
         return $this->belongsTo(Category::class);
