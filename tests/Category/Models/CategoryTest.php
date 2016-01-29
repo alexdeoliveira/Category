@@ -4,6 +4,8 @@ namespace TrezeVel\Category\Tests\Models;
 
 use TrezeVel\Category\Models\Category;
 use TrezeVel\Category\Tests\AbstractTestCase;
+use Illuminate\Validation\Validator;
+use Mockery as m;
 
 /**
 * Model de teste da categoria
@@ -15,6 +17,30 @@ class CategoryTest extends AbstractTestCase
     {
         parent::setUp();
         $this->migrate();
+    }
+
+    public function testInjectValidatorInCategoryModel()
+    {
+        $category = new Category();
+        $validator = m::mock(Validator::class);
+        $category->setValidator($validator);
+
+        $this->assertEquals($category->getValidator(), $validator);
+    }
+
+    public function testShouldCheckIfIsValidWhenItIs()
+    {
+        $category = new Category();
+        $category->name = 'Category test';
+
+        $validator = m::mock(Validator::class);
+        $validator->shouldReceive('setRules')->with(['name' => 'required|max:255']);
+        $validator->shouldReceive('setData')->with(['name' => 'Category test']);
+        $validator->shouldReceive('fails')->andReturn(false);
+
+        $category->setValidator($validator);
+
+        $this->assertTrue($category->isValid());
     }
 
     public function test_check_if_a_category_can_be_persisted()

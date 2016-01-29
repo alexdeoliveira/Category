@@ -5,6 +5,7 @@ namespace TrezeVel\Category\Models;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\SluggableInterface;
 use Cviebrock\EloquentSluggable\SluggableTrait;
+use Illuminate\Contracts\Validation\Validator;
 
 /**
 * Model de categorias
@@ -28,6 +29,27 @@ class Category extends Model implements SluggableInterface
         'active',
         'parent_id'
     ];
+
+    private $validator;
+
+    public function setValidator(Validator $validator)
+    {
+        $this->validator = $validator;
+    }
+
+    public function getValidator()
+    {
+        return $this->validator;
+    }
+
+    public function isValid()
+    {
+        $validator = $this->validator;
+        $validator->setRules(['name' => 'required|max:255']);
+        $validator->setData($this->getAttributes());
+
+        return !$validator->fails();
+    }
 
     public function categorizable()
     {
