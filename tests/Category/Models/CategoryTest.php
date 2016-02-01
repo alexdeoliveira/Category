@@ -28,7 +28,26 @@ class CategoryTest extends AbstractTestCase
         $this->assertEquals($category->getValidator(), $validator);
     }
 
-    public function testShouldCheckIfIsValidWhenItIs()
+    public function testShouldCheckIfItIsValidWhenItIs()
+    {
+        $category = new Category();
+        $category->name = 'Category test';
+
+        $messageBag = m::mock('Illuminate\Support\MessageBag');
+
+        $validator = m::mock(Validator::class);
+        $validator->shouldReceive('setRules')->with(['name' => 'required|max:255']);
+        $validator->shouldReceive('setData')->with(['name' => 'Category test']);
+        $validator->shouldReceive('fails')->andReturn(true);
+        $validator->shouldReceive('errors')->andReturn($messageBag);
+
+        $category->setValidator($validator);
+
+        $this->assertFalse($category->isValid());
+        $this->assertEquals($messageBag, $category->errors);
+    }
+
+    public function testShouldCheckIfItIsInvalidWhenItIs()
     {
         $category = new Category();
         $category->name = 'Category test';
