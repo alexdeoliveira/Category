@@ -1,6 +1,8 @@
 <?php
 namespace TrezeVel\Category\Controllers;
 
+use TrezeVel\Category\Models\Category;
+
 /**
 * Controller de categorias
 */
@@ -8,6 +10,7 @@ class AdminCategoriesController extends Controller
 {
     public function index()
     {
-        return view('trezevelCategory::index');
+        $categories = Category::all();
+        return view('trezevelCategory::index')->with(compact('categories'));
     }
 }
