@@ -13,4 +13,9 @@ class AdminCategoriesController extends Controller
         $categories = Category::all();
         return view('trezevelCategory::index')->with(compact('categories'));
     }
+
+    public function create()
+    {
+    	return view('trezevelCategory::create');
+    }
 }
