@@ -1,9 +1,12 @@
 @extends('layouts.app')
 @section('content')
     
-    <h3>Categories</h3>
-    <br>
-    <a href="{{ route('admin.categories.create') }}">Create Category</a>
+    <div class="col-md-8">
+        <h3>Categories</h3>
+    </div>
+    <div class="col-md-4 text-right">
+        <a href="{{ route('admin.categories.create') }}" class="btn btn-default">Create Category</a>
+    </div>
 
     <table class="table table-bordered">
         <thead>
