@@ -11,7 +11,6 @@ use Illuminate\Http\Request;
 class AdminCategoriesController extends Controller
 {
     private $category;
-	private $response;
 
 	public function __construct(Category $category)
 	{
@@ -26,7 +25,8 @@ class AdminCategoriesController extends Controller
 
     public function create()
     {
-    	$categories = $this->category->all();
+    	$categories = $this->getCategoriesForSelect();
+
     	return view('trezevelCategory::create')->with(compact('categories'));
     }
 
@@ -35,5 +35,53 @@ class AdminCategoriesController extends Controller
     	$this->category->create($request->all());
 
     	return redirect()->route('admin.categories.index');
+    }
+
+    public function edit($id)
+    {
+        $category = $this->category->find($id);
+        if (!$category->exists) {
+            return redirect()->route('admin.categories.index');
+        }
+
+        $categories = $this->getCategoriesForSelect();
+
+        return view('trezevelCategory::edit')->with(compact('categories', 'category'));
+    }
+
+    public function getCategoriesForSelect()
+    {
+        $categoriesObj = $this->category->all();
+        $categories[''] = '-Nenhum-';
+        foreach ($categoriesObj as $category) {
+            $categories[$category->id] = $category->name;
+        }
+
+        return $categories;
+    }
+
+    public function update(Request $request, $id)
+    {
+        $input = $request->all();
+
+        $category = $this->category->find($id);
+        if (!$category->exists) {
+            return redirect()->route('admin.categories.index');
+        }
+
+        $category->update($input);
+
+        return redirect()->route('admin.categories.index');
+    }
+
+    public function destroy($id)
+    {
+        $category = $this->category->find($id);
+
+        if ($category->exists) {
+            $category->delete();
+        }
+
+        return redirect()->route('admin.categories.index');
     }
 }

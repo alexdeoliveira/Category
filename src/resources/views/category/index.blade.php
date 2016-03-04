@@ -1,19 +1,23 @@
 @extends('layouts.app')
 @section('content')
     
-    <div class="col-md-8">
-        <h3>Categories</h3>
+    <div class="row">
+        <div class="col-md-8">
+            <h3>Categories</h3>
+        </div>
+        <div class="col-md-4 text-right">
+            <a href="{{ route('admin.categories.create') }}" class="btn btn-default">Create Category</a>
+        </div>
     </div>
-    <div class="col-md-4 text-right">
-        <a href="{{ route('admin.categories.create') }}" class="btn btn-default">Create Category</a>
-    </div>
+
+    <hr>
 
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Nome</th>
-                <th>Situacao</th>
-                <th>Acao</th>
+                <th width="50%">Nome</th>
+                <th width="15%">Situacao</th>
+                <th width="35%">Acao</th>
             </tr>
         </thead>
         <tbody>
@@ -22,7 +26,10 @@
                     <tr>
                         <td>{{ $category->name }}</td>
                         <td>{{ $category->active }}</td>
-                        <td></td>
+                        <td>
+                            <a href="{{ route('admin.categories.edit', $category->id) }}" class="btn btn-xs btn-default"><i class="fa fa-pencil"></i> Editar</a>
+                            <a href="{{ route('admin.categories.destroy', $category->id) }}" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i> Excluir</a>
+                        </td>
                     </tr>
                 @endforeach
             @else
